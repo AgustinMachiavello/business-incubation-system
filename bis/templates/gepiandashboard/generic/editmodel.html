@@ -1,0 +1,103 @@
+{% extends '../../base.html' %}
+{% load custom_filters %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        {% if model_handle in 'provinces,cities,technicians,technicianspecialities,businessareas,files,users,sitesettings' %}
+            <a href="{% url 'gepian:administrationindex' %}">Administración</a>
+        {% else %}
+            <a href="{% url 'gepian:dashboardindex' %}">Inicio</a>
+        {% endif %}
+        {% block crumbs %}
+            {% if model_name and model_handle not in 'sitesettings' %}
+                &rsaquo; 
+                <a href="{% url 'gepian:genericlistmodel' model=model_handle %}">
+                    <span class="text-capitalize">{{ model_name }}</span>
+                </a>
+            {% endif %}
+            {% if model_name_singular %} &rsaquo; <span class="text-capitalize">Editar {{ model_name_singular }}</span>{% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="edit-model-page">
+    <div class="row p-3">
+        {% comment %}
+        <a class="btn btn-light border rounded" href="{% url 'gepian:genericlistmodel' model=model_handle %}">
+            ←
+        </a>
+        <h4 class="page__title">{{ model_name_singular }}<span class="d-none d-lg-inline">:</span></h4>
+        {% endcomment %}
+        <h4 class="">{{ model_instance }}</h4>
+    </div>
+    {% if model_handle in 'stages,interviews,projects' %}
+        <h5 class="text-secondary">
+            Tiempo empleado: {{ model_instance.get_time_spent}} H
+        </h5>
+    {% endif %}
+    <div class="edit-page__form-wrapper form-wrapper mb-5 p-4 shadow rounded">
+        <form class="" method="POST" id="edit_{{ model_handle }}_form" action="{% url 'gepian:genericeditmodel' model=model_handle id=model_instance.id %}">
+            {% csrf_token %}
+            {{ form.media }}
+            {% for field in form %}
+                <div class="form-group mb-3 {% if model_handle == 'broadcasts' and 'send_to_' in field.name %}d-inline-flex pr-2{% endif %}">
+                    <label class="" for="id_{{ field.name }}">
+                        {{ field.label }}
+                        {% if field.field.required %}
+                            <span class="text-danger">*</span>
+                        {% endif %}
+                    </label>
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger py-1">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                    {% if model_handle == 'broadcasts' and 'send_to_' in field.name %}
+                        <span class="ml-1"></span>
+                    {% endif %}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <p class="field-help help">
+                            {{ field.help_text }}
+                        </p>
+                    {% endif %}
+                    {% if field.name == 'inscription_link' %}
+                        <div class="pt-2">
+                            <a id="copy-to-clipboard" class="btn btn-info text-white copy-link" data-copy="{{ request.META.HTTP_HOST }}{% url 'gepian:inscription' inscription_code=field.value %}" onclick="copyToClipboardMain()">Copiar</a>
+                            <a class="d-none d-lg-inline" href="{% url 'gepian:inscription' inscription_code=field.value %}" target="__blank">{{ request.META.HTTP_HOST }}{% url 'gepian:inscription' inscription_code=field.value %}</a>
+                            <a class="d-lg-none d-inline" href="{% url 'gepian:inscription' inscription_code=field.value %}" target="__blank">↗ Link de inscripción</a>
+                        </div>       
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="row form-group form-actions mb-0">
+                <div>
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger py-1">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-12 col-xs-7">
+                    <button type="submit" class="btn btn-primary rounded">Actualizar{% if model_handle == 'broadcasts' %} y enviar{% endif %}</button>
+                    <!-- button type="reset" class="btn btn-secondary">Limpiar</button -->
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    {% include '../sections/related-model-links-handler.html' with model_handle=model_handle related_model_handle='' model_instance=model_instance %}
+    
+    <form class="mt-3" method="GET" id="edit_{{ model_handle }}_delete_form" action="{% url 'gepian:genericdeletemodel' model=model_handle id=model_instance.id %}">
+        {% csrf_token %}
+        <div class="row form-group form-actions mb-0">
+            <div class="col-md-12 col-xs-7">
+                {% if model_handle != 'sitesettings' %}
+                    <button type="submit" class="btn btn-danger rounded">Eliminar {{ model_name_singular }}</button>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

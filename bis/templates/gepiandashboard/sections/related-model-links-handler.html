@@ -1,0 +1,210 @@
+{% comment %}
+Show links to edit related model instances
+{% endcomment %}
+{% load custom_filters %}
+
+{% block content %}
+    <div>
+        {% if model_handle == 'entrepreneurs' %}
+            <div class="related-model-links-container mb-5">
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='projects' %}" target="__blank">↗</a><h5 class="d-inline">proyectos</h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.project_entrepreneurs.all|length == 0 %}
+                            <span>No hay proyectos asociados a este emprendedor</span>
+                        {% else %}
+                            {% for project in model_instance.project_entrepreneurs.all %}
+                                <li class="list-group-item">
+                                    <a class="p-3" href="{% url 'gepian:genericeditmodel' model='projects' id=project.id %}" target="__blank">{{ project.name }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="related-model-links-container mb-5">
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='files' %}" target="__blank">↗</a><h5 class="d-inline">archivos </h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.file_entrepreneur.all|length == 0 %}
+                            No hay archivos registradas para este emprendedor
+                        {% else %}
+                            {% for file in model_instance.file_entrepreneur.all %}
+                                <li class="list-group-item">
+                                    <a class="p-3" href="{% url 'gepian:genericeditmodel' model='files' id=file.id %}" target="__blank">
+                                        <span>{{ file.name }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% elif model_handle == 'projects' %}
+            <div class="related-model-links-container mb-5">
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='interviews' %}" target="__blank">↗</a><h5 class="d-inline">entrevistas</h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.stage_project.all|length == 0 %}
+                            <span>No hay entrevistas registradas para este proyecto</span>
+                        {% else %}
+                            {% for stage in model_instance.stage_project.all %}
+                                {% for interview in stage.interview_stage.all %}
+                                    <li class="list-group-item">
+                                        <a class="p-3" href="{% url 'gepian:genericeditmodel' model='interviews' id=interview.id %}" target="__blank">
+                                            <span>{{ interview.created_at|date:"SHORT_DATE_FORMAT" }}</span>
+                                            <span class="badge badge-primary badge-pill">{{ interview.get_interview_type_display }}</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="related-model-links-container mb-5">
+
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='stages' %}" target="__blank">↗</a><h5 class="d-inline">etapas </h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.stage_project.all|length == 0 %}
+                            No hay etapas registradas para este proyecto
+                        {% else %}
+                            {% for stage in model_instance.stage_project.all %}
+                                <li class="list-group-item">
+                                    <a class="p-3" href="{% url 'gepian:genericeditmodel' model='stages' id=stage.id %}" target="__blank">
+                                        <span>{% if stage.start_date %}{{ stage.start_date|date:"SHORT_DATE_FORMAT" }}{% else %}Sin fecha de inicio{% endif %} - {% if stage.end_date %}{{ stage.end_date|date:"SHORT_DATE_FORMAT" }}{% else %}Actualidad{% endif %}</span>
+                                        <span class="badge badge-primary badge-pill">{{ stage.get_stage_type_display }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="related-model-links-container mb-5">
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='financings' %}" target="__blank">↗</a><h5 class="d-inline">finanzas </h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.financing_project.all|length == 0 %}
+                            No hay finanzas registradas para este proyecto
+                        {% else %}
+                            {% for finance in model_instance.financing_project.all %}
+                                <li class="list-group-item">
+                                    <a class="p-3" href="{% url 'gepian:genericeditmodel' model='financings' id=finance.id %}" target="__blank">
+                                        <span>{{ finance.started_on_date|date:"SHORT_DATE_FORMAT" }} - {{ finance.finished_on_date|date:"SHORT_DATE_FORMAT" }} ({{ finance.code }})</span>
+                                        <span class="badge badge-primary badge-pill">{{ finance.get_code_type_display }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="related-model-links-container mb-5">
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='files' %}" target="__blank">↗</a><h5 class="d-inline">archivos </h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.file_project.all|length == 0 %}
+                            No hay archivos registradas para este proyecto
+                        {% else %}
+                            {% for file in model_instance.file_project.all %}
+                                <li class="list-group-item">
+                                    <a class="p-3" href="{% url 'gepian:genericeditmodel' model='files' id=file.id %}" target="__blank">
+                                        <span>{{ file.name }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% elif model_handle == 'interviews' %}
+            <div class="related-model-links-container mb-5">
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='files' %}" target="__blank">↗</a><h5 class="d-inline">archivos </h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.file_interview.all|length == 0 %}
+                            No hay archivos registradas para esta entrevista
+                        {% else %}
+                            {% for file in model_instance.file_interview.all %}
+                                <li class="list-group-item">
+                                    <a class="p-3" href="{% url 'gepian:genericeditmodel' model='files' id=file.id %}" target="__blank">
+                                        <span>{{ file.name }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% elif model_handle == 'stages' %}
+            <div class="related-model-links-container mb-5">
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='files' %}" target="__blank">↗</a><h5 class="d-inline">archivos </h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.file_stage.all|length == 0 %}
+                            No hay archivos registradas para esta etapa
+                        {% else %}
+                            {% for file in model_instance.file_stage.all %}
+                                <li class="list-group-item">
+                                    <a class="p-3" href="{% url 'gepian:genericeditmodel' model='files' id=file.id %}" target="__blank">
+                                        <span>{{ file.name }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% elif model_handle == 'activities' %}
+            <div class="related-model-links-container mb-5">
+                <div class="related-model-links__list p-4 shadow rounded">
+                    <div class="pb-4">
+                        <a class="d-inline mr-2" href="{% url 'gepian:genericlistmodel' model='inscriptions' %}" target="__blank">↗</a>
+                            <h5 class="d-inline">
+                                inscripciones: {{ model_instance.inscriptions.all.count }} · <span>asistencias: {{ model_instance.inscriptions.all|filter_query:'assisted,1' }}</span> 
+                            </h5>
+                    </div>
+                    <ul class="list-group">
+                        {% if model_instance.inscriptions.all|length == 0 %}
+                            No hay inscripciones registradas para esta actividad
+                        {% else %}
+                            {% for inscription in model_instance.inscriptions.all|slice:":20" %}
+                                <li class="list-group-item">
+                                    <a class="p-3" href="{% url 'gepian:genericeditmodel' model='inscriptions' id=inscription.id %}" target="__blank">
+                                        <span class="text-lowercase">{{ inscription.email }} ({{ inscription.phone_number }})</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                    <div class="row form-group form-actions pt-4 mb-0">
+                        <div class="col-md-12 col-xs-7">
+                            <a class="btn btn-link d-inline-block rounded" href="{% url 'gepian:genericlistmodel' model='inscriptions' %}?activity_inscriptions={{ model_instance.id }}" target="__blank">↗ ver todas</a>
+                            {% with model_export="inscriptions__activity_inscriptions__"|addstr:model_instance.id %}
+                                <a class="btn btn-primary d-inline-block rounded" href="{{ model_export|get_report_export_url:'xls' }}">exportar</a>
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

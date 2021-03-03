@@ -1,0 +1,28 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<div class="p-4 bg-white shadow rounded delete-page">
+    <div class="d-flex justify-content-center w-100 icon-wrapper">
+        <img class="" src="{% static '/img/delete_cross.png' %}" alt="delete cross" loading="lazy"/>
+    </div>
+    <div class="p-4 text-center">
+        <h2 class="page-title">¿De verdad quieres eliminar '{{ model_instance }}'?</h2>
+        <p class="text-secondary">Ten en cuenta que este proceso no se puede deshacer</p>
+        {% if delete_error != False %}
+            <div class="alert alert-danger" role="alert">
+                <h4>Ups. Algo salió mal :(</h4>
+                Error: {{ delete_error }}
+            </div>
+        {% endif %}
+        <form class="mt-4" method="POST" action="{% url 'gepian:genericdeletemodel' model=model_handle id=model_instance.id %}">
+            {% csrf_token %}
+            <a class="btn btn-secondary rounded" href="{% url 'gepian:genericlistmodel' model=model_handle %}">
+                Cancelar
+            </a>
+            <button type="submit" class="btn btn-danger rounded">Eliminar {{ model_name }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

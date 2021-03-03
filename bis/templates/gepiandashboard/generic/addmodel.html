@@ -1,0 +1,78 @@
+{% extends '../../base.html' %}
+{% load custom_filters %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        {% if model_handle in 'provinces,cities,technicians,technicianspecialities,businessareas,files,users' %}
+            <a href="{% url 'gepian:administrationindex' %}">Administración</a>
+        {% else %}
+            <a href="{% url 'gepian:dashboardindex' %}">Inicio</a>
+        {% endif %}
+        {% block crumbs %}
+            {% if model_name %}
+                &rsaquo; 
+                <a href="{% url 'gepian:genericlistmodel' model=model_handle %}">
+                    <span class="text-capitalize">{{ model_name }}</span>
+                </a>
+            {% endif %}
+            {% if model_name_singular %} &rsaquo; <span class="text-capitalize">Registrar {{ model_name_singular }}</span>{% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="add-model-page">
+        <div class="row p-3">
+            {% comment %}
+            <a class="btn btn-light border rounded" href="{% url 'gepian:genericlistmodel' model=model_handle %}">
+                ←
+            </a>
+            {% endcomment %}
+            <h4 class="page__title">Registrar {{ model_name_singular }}</h4>
+        </div>
+        <div class="add-model-page__form-wrapper form-wrapper mb-5 p-4 shadow rounded">
+            <form method="POST" id="add_{{ model_handle }}_form"
+                action="{% url 'gepian:genericaddmodel' model=model_handle %}">
+                {% csrf_token %}
+                {{ form.media }}
+                {% for field in form %}
+                    <div class="form-group mb-3 {% if model_handle == 'broadcasts' and 'send_to_' in field.name %}d-inline-flex pr-2{% endif %}">
+                        <label class="" for="id_{{ field.name }}">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                                <span class="text-danger">*</span>
+                            {% endif %}
+                        </label>
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger py-1">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                        {% if model_handle == 'broadcasts' and 'send_to_' in field.name %}
+                            <span class="ml-1"></span>
+                        {% endif %}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="field-help help">
+                                {{ field.help_text }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="row form-group form-actions mb-0">
+                    <div>
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger py-1">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-12 col-xs-7">
+                        <button type="submit" class="btn btn-primary rounded">Guardar{% if model_handle == 'broadcasts' %} y enviar{% endif %}</button>
+                        <button type="reset" class="btn btn-secondary rounded">Limpiar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

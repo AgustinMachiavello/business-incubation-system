@@ -1,0 +1,39 @@
+nav .container {
+    margin: 0px;
+    padding: 0px;
+    max-width: unset;
+}
+
+.information-block {
+    width: 49%;
+    background-color: var(--plain-white);
+    margin-bottom: 2%;
+}
+
+.information-block:nth-child(even):not(.information-block--large) {
+    margin-left: 2%;
+}
+
+.information-block__title {
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.information-block__stadistic {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.information-block__link {
+    text-transform: capitalize;
+}
+
+@media (max-width: 767px) {
+    .information-block {
+        width: 100%;
+    }
+
+    .information-block:nth-child(even):not(.information-block--large) {
+        margin-left: 0%;
+    }
+}

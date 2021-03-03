@@ -1,0 +1,24 @@
+{% load static %}
+
+{{ broadcast.message|safe }}
+
+{% if broadcast.files.all.count > 0 %}
+    <hr>
+    <p>
+        <h4>Archivos adjuntos:</h4>
+        {% for file in broadcast.files.all %}
+            <a href="{{ file.file_link }}">{{ file.name }}</a>
+            <br><br>
+        {% endfor %}
+    </p>
+{% endif %}
+
+<p>
+    Gepian<br>
+    {% comment %}
+    <img src="{{ domain }}{% static '/img/logoipsum.png' %}" alt="logo gepian sembrando negocios">
+    {% endcomment %}
+    <img src="https://www.gepian.com.uy/sites/default/files/logo-simple.png" alt="logo gepian sembrando negocios">
+</p>
+
+<span>contacto@gepian.com.uy</span>

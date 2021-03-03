@@ -1,0 +1,54 @@
+<!doctype html>
+{% load static %}
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="openseed">
+        <meta name="author" content="# TODO">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+        <style>
+            .btn {
+                border-radius: 0rem;
+            }
+            .error-template {
+                padding: 40px 15px;
+                text-align: center;
+            }
+            .action {
+                margin-top:15px;
+                margin-bottom:15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="error-template">
+                        <h1 class="display-1">404</h1>
+                        <h2>PÁGINA NO ENCONTRADA</h2>
+                        <div class="">
+                            Lo lamentamos, pero la página que solicitó no fue encontrada.
+                        </div>
+                        <div class="action">
+                            <!-- agregar ruta -->
+                            <a href="{% url 'gepian:dashboardindex' %}" class="btn btn-primary btn-sm">
+                                <span class="glyphicon">
+                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-house-door-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.5 10.995V14.5a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5V11c0-.25-.25-.5-.5-.5H7c-.25 0-.5.25-.5.495z"/>
+                                        <path fill-rule="evenodd" d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

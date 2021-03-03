@@ -1,0 +1,34 @@
+.page__title {
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.form-wrapper label {
+    text-transform: capitalize;
+}
+
+.form-wrapper {
+    background-color: var(--plain-white);
+}
+
+.django-ckeditor-widget {
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+
+    flex-direction:row!important;
+    -ms-flex-direction:row!important;
+}
+
+.help:not(.field-help) {
+    display: none;
+}
+
+input[type='checkbox'] {
+    width: 1.5rem;
+}
+
+.ui-widget.ui-widget-content {
+    border-radius: 8px;
+}

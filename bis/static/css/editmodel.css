@@ -1,0 +1,25 @@
+.related-model-links-container h5 {
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.related-model-links__list {
+    background-color: var(--plain-white);
+}
+
+.related-model-links__list a {
+    display: block;
+    text-transform: capitalize;
+}
+
+.related-model-links__list .badge {
+    float: right;
+}
+
+.related-model-links__list li {
+    padding: 0px;
+}
+
+.related-model-links__list li:hover {
+    background-color: var(--off-white);
+}

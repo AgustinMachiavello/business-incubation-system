@@ -1,0 +1,396 @@
+:root{
+    /* colors */
+    --title-color: #313131;
+    --accent-darkest: #2c2c2c;
+    --accent-dark: #343a40;
+    --accent-blue:#007bff;
+    --plain-black: #000;
+    --plain-white: #fff;
+    --off-white: rgba(241, 242, 243, 1);
+    --subdued-text: #637381;
+    /* text */
+    --font-family: 'Open Sans' !important;
+    --font-size-h2: 32px;
+    --font-size-text: 12px;
+    /* transitions */
+    --transition: .4s ease-in-out;
+    --box-shadow: 0px 0px 16px 0px #00000033;
+    --orange: #e46713;
+}
+
+*{
+    font-family: var(--font-family);
+}
+
+button, input, nav, ol {
+    border-radius: 0rem !important;
+}
+
+/* top bar*/
+
+.navbar {
+    padding: 0.20rem 1rem;
+    box-shadow: 0px 0px 16px 0px #00000033;
+}
+
+.navbar .logo {
+    position: absolute;
+    left: 50%;
+    margin-left: -38px !important;
+}
+
+.navbar .dropdown .dropdown-menu{
+    display: hidden;
+}
+
+.navbar .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.navbar .dropdown-menu.show {
+    left: revert;
+}
+
+
+#sidebar-toggle {
+    width: 46px;
+    height: 30px;
+    padding: 0;
+    vertical-align: middle;
+}
+
+/* sidebar */
+
+#wrapper {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: var(--transition);
+    -moz-transition: var(--transition);
+    -o-transition: var(--transition);
+    transition: var(--transition);
+}
+
+#page-content-wrapper {
+    min-width: 100vw;
+    background-color: var(--off-white);
+}
+
+svg.sidebar {
+    margin: 0 5px; /* sidebar icon left-right margin */
+}
+
+a.list-group-item.bg-dark {
+    color: #ffffff;
+    -moz-transition: all var(--transition);
+    -o-transition: all var(--transition);
+    -webkit-transition: all var(--transition);
+    transition: all var(--transition);
+}
+
+a.list-group-item.bg-dark:hover {
+    color: #ffffff;
+    background-color: var(--accent-darkest);
+    -moz-transition: all var(--transition);
+    -o-transition: all var(--transition);
+    -webkit-transition: all var(--transition);
+    transition: all var(--transition);
+}
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+
+/* Loading */
+
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 1rem;
+    height: 1rem;
+    padding-right: 56px;
+}
+.lds-ellipsis div {
+    position: absolute;
+    top: 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #fff;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(24px, 0);
+    }
+}
+
+
+
+/* content */
+
+h1, h2 { margin: 1rem 0; }
+
+h1 {
+    font-size: 2rem; /* should be 1.5 for mobile */
+}
+
+h2 {
+    font-size: 1.75rem; /* should be 1.25 for mobile */
+}
+
+.content.container {
+    width: 100%;
+    padding: 2rem 0;
+}
+
+/* forms */
+
+.form {
+    margin: 2rem 0;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+    vertical-align: middle;
+}
+
+.form-group label {
+    margin: 0;
+    align-self: center;
+}
+
+.form-group input, select, .input-group input {
+    width: 100%;
+    padding: 0.2rem 0.75rem;
+    border: 0.099rem solid #ced4da;
+}
+
+.form-group input:focus, .input-group input:focus {
+    outline: solid;
+    outline-color: var(--accent-blue);
+    box-shadow: var(--box-shadow);
+}
+
+.row.form-actions {
+    text-align: right;
+}
+
+/* tables */
+.row.list, .row.list-header {
+    margin: auto;
+    padding: 0.5rem 0;
+}
+
+.row.list {
+    border-bottom: 1px solid #ced4da;
+}
+
+.row.list-header {
+    color: var(--accent-blue);
+    background-color: #ced4da85;
+}
+
+.row.list a {
+    margin: 0 0.25rem;
+    text-decoration: none;
+}
+
+.delete-page .icon-wrapper img {
+    width: 100px;
+    height: 100px;
+}
+
+/* other */
+
+@media (min-width: 769px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+
+    .content.container {
+        width: 75%;
+    }
+    
+}
+
+.btn-toolbar {
+    margin: 2rem 0;
+}
+
+p.help {
+    opacity: 0.5;
+}
+
+.btn-orange {
+    color: var(--plain-white);
+    background-color: var(--orange);
+    transition: all 0.5s ease;
+}
+
+.btn-orange:hover {
+    color: var(--orange);
+    background-color: var(--plain-white);
+}
+
+#page-content-wrapper.postulation-page {
+    background-image: url('../img/startup-594090_1920.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#page-content-wrapper.inscription-page {
+    background-image: url('../img/startup-594090_1920.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.postulation-page .container {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+}
+
+.postulation-page a {
+    color: var(--orange);
+    font-weight: bold;
+}
+
+.postulation-page hr {
+    border-color: var(--orange);
+}
+
+.postulation-page .gepian-info img {
+    max-width: 150px;
+}
+
+.inscription-page {
+    min-height: 100vh;
+}
+
+.inscription-page a {
+    color: var(--orange);
+    font-weight: bold;
+}
+
+.inscription-page hr {
+    border-color: var(--orange);
+}
+
+.menu-block {
+    width: 100%;
+    text-decoration: none !important;
+}
+
+.menu-block:hover span {
+    text-decoration: underline;
+}
+
+.action-link:hover {
+    text-decoration: none;
+}
+
+.action-link:focus {
+    text-decoration: none;
+}
+
+.modal .related-model-links__list .badge {
+    float: none !important;
+}
+
+.remove-filter-wrapper {
+    width: 100%;
+}
+
+
+/* sm and up*/
+@media screen and (min-width: 576px) {
+    .menu-block {
+        width: 49%;
+    }
+}
+
+/* md and up*/
+@media screen and (min-width: 768px) {
+    .remove-filter-wrapper {
+        width: unset;
+    }
+}
+
+/* lg and up*/
+@media screen and (min-width: 992px) {
+    .postulation-page .form-wrapper {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+    
+    .postulation-page .gepian-info {
+        width: 40%;
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+    }
+
+    .lds-ellipsis {
+        padding-right: 0px;
+    }
+}
+
+/* xl and up*/
+@media screen and (min-width: 1200px) {
+
+}

@@ -1,0 +1,91 @@
+{% extends '../../base.html' %}
+{% load custom_filters %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        {% if model_handle in 'provinces,cities,technicians,technicianspecialities,businessareas,files,users' %}
+            <a href="{% url 'gepian:administrationindex' %}">Administración</a>
+        {% else %}
+            <a href="{% url 'gepian:dashboardindex' %}">Inicio</a>
+        {% endif %}
+        {% block crumbs %}
+            {% if model_name %}
+                &rsaquo; 
+                <a href="{% url 'gepian:reportsindex' %}">
+                    <span class="text-capitalize">Reportes</span>
+                </a>
+            {% endif %}
+            {% if model_name %} &rsaquo; <span class="text-capitalize">Reportes {{ model_name }}</span>{% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<div class="list-model-page">
+    <div class="row p-3">
+        {% comment %}
+        <a class="btn btn-light border rounded" href="{% url 'gepian:reportsindex' %}">
+            ←
+        </a>
+        {% endcomment %}
+        <h4 class="page__title">Reportes {{ model_name }}</h4>
+    </div>
+
+    <!-- Start Actions -->
+    <div class="list-model-page__actions btn-toolbar justify-content-between py-4 m-0"  role="toolbar" aria-label="Toolbar" id="reportDateRange">
+        <div class="d-flex flex-wrap align-items-center flex-column flex-sm-row btn-group" role="group" aria-label="First group">
+            <span class="py-2">
+                Desde
+                <input class="mx-3 btn btn-light border rounded datepicker" placeholder="01/01/{% now 'Y' %}" aria-label="date from filter" id="reportDateRangeFrom" {% if dateFrom != None %}value={{ dateFrom }}{% else %}{% endif %}></input>
+            </span>
+            
+            <span class="py-2">
+                Hasta
+                <input class="mx-3 btn btn-light border rounded datepicker" placeholder="{% now 'SHORT_DATE_FORMAT' %}" aria-label="date to filter" id="reportDateRangeTo" {% if dateTo != None %}value={{ dateTo }}{% endif %}></input>
+            </span>
+           
+        </div>
+        <div class="btn-group py-2">
+            <button type="button" class=" btn btn-outline-dark shadow-sm rounded text-capitalize" aria-haspopup="true" aria-expanded="false" id="remove_filters">
+                Limpiar filtros
+            </button>
+        </div>
+
+    </div>
+    <!-- End Actions -->
+
+    <!-- Reports Blocks -->
+    <div class="d-flex flex-wrap">
+        {% for analytic in model_analytics_dict %}
+            {% include '../snippets/stadistics-report.html' with analytic_handle=analytic|get_item:'analytic_handle' show_graph=analytic|get_item:'show_graph' graph_type=analytic|get_item:'graph_type' graph_size=analytic|get_item:'graph_size' title=analytic|get_item:'title' link_url=analytic|get_item:'link_url'|get_report_export_url:'xls' link_label=analytic|get_item:'link_label' logo=analytic|get_item:'logo' %}
+        {% endfor %}
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <a class="btn btn-primary" href="{{ model_export|get_report_export_url:'xls' }}">
+            Exportar todos los registros de {{ model_name }}
+        </a>
+    </div>
+
+    <!-- div class="table-container p-4 shadow rounded">
+        <h4>Generar reporte de {{ model_name }} (x)</h4>
+        <div class="">
+            {% include '../snippets/list-filters.html' with model_objects_filter_dict=model_objects_filter_dict model_handle=model_handle %}
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle rounded" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Exportar
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              {% comment %}
+              <a class="dropdown-item" href="{% url 'incubator:exportcsv' %}">CSV</a>
+              <a class="dropdown-item" href="{% url 'incubator:exportxls' %}">XLS</a>
+              <a class="dropdown-item" href="#">PDF (Pendiente)</a>
+              {% endcomment %}
+            </div>
+        </div>
+    </div-->
+</div>
+
+{% endblock %}

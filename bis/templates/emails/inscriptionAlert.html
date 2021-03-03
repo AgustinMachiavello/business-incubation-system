@@ -1,0 +1,36 @@
+{% load static %}
+
+<h1>Hola, {{ name }}!</h1>
+
+<h4>
+    Has recibido este mensaje porque te has inscrito a '{{ activity.title }}'
+</h4>
+
+<p>
+    <h5>Fecha: {{ activity.date |date }} </h5>
+
+    {% if activity.start_time %}
+    <h5>
+        {% if activity.end_time == None %}
+            A las {{ activity.start_time }}
+        {% else %}
+            De {{ activity.start_time }} a {{ activity.end_time }}
+        {% endif %}
+    </h5>
+    {% endif %}
+
+    <br><br>
+    ·  Número de inscripción: {{ inscription.id }}
+    <br><br>
+    ·  Número de actividad: {{ activity.id }}
+</p>
+
+<p>
+    Gepian<br>
+    {% comment %}
+    <img src="{{ domain }}{% static '/img/logoipsum.png' %}" alt="logo gepian sembrando negocios">
+    {% endcomment %}
+    <img src="https://www.gepian.com.uy/sites/default/files/logo-simple.png" alt="logo gepian sembrando negocios">
+</p>
+
+<span>Si no has sido tú, por favor, ponte en contacto con contacto@gepian.com.uy o responde a este correo.</span>

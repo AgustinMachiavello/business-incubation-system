@@ -1,0 +1,45 @@
+{% extends '../../base.html' %}
+{% load custom_filters %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'gepian:dashboardindex' %}">Inicio</a>
+        {% block crumbs %}
+            {% if model_name %}
+                &rsaquo; 
+                <a href="{% url 'gepian:genericlistmodel' model=model_handle %}">
+                    <span class="text-capitalize">{{ model_name }}</span>
+                </a>
+            {% endif %}
+            {% if model_name_singular %} &rsaquo; <span class="text-capitalize">Vista previa {{ model_name_singular }}</span>{% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="view-model-page">
+        {% comment %}
+        <a class="btn btn-light border rounded" href="{% url 'gepian:genericlistmodel' model=model_handle %}">
+            ←
+        </a>
+        <h4 class="page__title ml-3">{{ model_name }}<span class="d-none d-lg-inline">:</span></h4>
+        {% endcomment %}
+        <a class="py-3 d-inline-block" href="{% url 'gepian:genericeditmodel' model=model_handle id=model_instance.id %}"
+            data-toggle="tooltip" data-placement="top" title="Editar">
+            <h4 class="d-inline">{{ model_instance }}</h4>
+            <i class=" align-items-center bi bi-pencil-fill"></i>
+        </a>
+    </div>
+    <ul class="list-group shadow rounded">
+        {% for field in model_instance_serialized %}
+            <li class="list-group-item">
+                <span class="font-weight-bold text-capitalize">{{ field|get_field_display_label:model_handle }}: </span>
+                {{ model_instance_serialized|get_item:field|get_display_name:model_handle|safe }}
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="mt-3">
+        {% include '../sections/related-model-links-handler.html' with model_handle=model_handle related_model_handle='' model_instance=model_instance %}
+    </div>
+</div>
+{% endblock %}

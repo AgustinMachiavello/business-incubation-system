@@ -1,0 +1,58 @@
+<!-- Base for all html pages -->
+<!doctype html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="openseed">
+    <meta name="author" content="# TODO">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="{% static '/css/jquery-ui.min.css' %}">
+
+    <!-- Page specific style -->
+    <link rel="stylesheet" href="{% static '/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static '/css/editmodel.css' %}">
+    <link rel="stylesheet" href="{% static '/css/listmodel.css' %}">
+    <link rel="stylesheet" href="{% static '/css/forms.css' %}">
+    <link rel="stylesheet" href="{% static '/css/reports.css' %}">
+
+    <!-- Chart library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    {% block style %}
+    {% endblock style %}
+</head>
+<body>
+    <!-- content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="content container">
+                    <main>
+                        {% block content %}
+                        {% endblock %}
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <!-- script src="{% static '/js/jquery-3.5.1.slim.min.js' %}"></script -->
+    <script src="{% static '/js/jquery-3.5.1.js' %}"></script>
+    <script src="{% static '/js/jquery-ui.min.js' %}"></script>
+    <script src="{% static '/js/datepicker-es.js' %}"></script>
+    <script src="{% static '/js/popper.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.min.js' %}"></script>
+    <script src="{% static '/js/scripts.js' %}"></script>
+    <script src="{% static '/js/analytics.js' %}"></script>
+    <script src="{% static '/js/filters.js' %}"></script>
+    {% block javascript %}
+    {% endblock javascript %}
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends '../../base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+    <div>
+        <h4 class="page__title">Inicio</h4>
+        <section class="d-flex flex-column">
+            <!-- Information Blocks -->
+            <div class="d-flex flex-wrap">
+                <!-- Reports Blocks -->
+                {% for analytic, analytic_data in analytics.items %}
+                    {% include '../snippets/stadistics-report.html' with title=analytic_data|get_item:'title' analytic_handle=analytic_data|get_item:'analytic_handle' show_graph=analytic_data|get_item:'show_graph' graph_type=analytic_data|get_item:'graph_type' link_url=analytic_data|get_item:'link_url'|get_listing_url link_label=analytic_data|get_item:'link_label' logo=analytic_data|get_item:'logo' %}
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

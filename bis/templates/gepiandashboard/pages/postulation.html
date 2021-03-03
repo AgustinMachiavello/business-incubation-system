@@ -1,0 +1,139 @@
+{% extends '../../base_public.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="postulate-page container-fluid">
+        <div class="d-none d-lg-block">
+            <a href="https://www.gepian.com.uy/">
+                <img class="mb-5" src="{% static '/img/logoipsum.png' %}" alt="logo gepian"/>
+            </a>
+        </div>
+        <div class="d-flex flex-column flex-lg-row">
+            <div class="form-wrapper p-4 shadow rounded">
+                <div class="pb-4">
+                    <h2 class="font-weight-bold">
+                        {% if site_settings.postulation_page_title %}
+                            {{ site_settings.postulation_page_title|safe  }}
+                        {% else %}
+                            Bases y Postulación
+                        {% endif %}
+                    </h2>
+                    <hr>
+                    <p class="badge badge-primary text-wrap">
+                        Convocatoria abierta todo el año
+                    </p>
+                    <p>
+                        {% if site_settings.postulation_page_title %}
+                            {{ site_settings.postulation_page_description|safe  }}
+                        {% else %}
+                            ¿Tenés dudas sobre el proceso de postulación, selección y la incubación? 
+                            Escribinos a <a href="mailto:contacto@gepian.com.uy">contacto@gepian.com.uy</a> o consultá las BASES para obtener financiamiento. 
+                            <p>
+                                <a href="https://www.gepian.com.uy/sites/default/files/Bases%20Semilla%20ANDE%20Incubadoras%202019.pdf" target="__blank">Ver Bases ANDE</a>
+                            </p>
+                            <p>
+                                <a href="https://www.gepian.com.uy/sites/default/files/Bases%20Emprendedores%20Innovadores%20para%20incubadora%20ANII%202019.pdf" target="__blank">Ver Bases ANII</a>
+                            </p>
+                        {% endif %}
+                    </p>
+                    <p class="">
+                        <span class="text-danger">*</span> = Campo obligatorio
+                    </p>
+                </div>
+                <!-- h4 class="page__title ml-3">Postulación</h4-->
+                {% if post_successful == True %}
+                    <div class="alert alert-success" role="alert">
+                        Tu postulación ha sido enviada con éxito. Muchas gracias
+                    </div>
+                {% else %}
+                    <form method="POST" id="add_{{ model_handle }}_public_form"
+                        action="{% url 'gepian:postulate' %}"
+                        class="border rounded p-4">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        {% for field in form %}
+                            <div class="form-group mb-3">
+                                {% if field.name == 'name' %}
+                                    <hr>
+                                {% endif %}
+                                <label class="font-weight-bold" for="id_{{ field.name }}">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                     <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
+
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger py-1">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <p class="field-help help py-1">{{ field.help_text }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div class="row form-group form-actions mb-0">
+                            <div>
+                                {% for error in form.non_field_errors %}
+                                    <div class="alert alert-danger py-1">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-12 col-xs-7">
+                                <button type="submit" class="btn btn-orange shadow rounded font-weight-bold btn-lg">Enviar</button>
+                                <!--button type="reset" class="btn btn-secondary rounded">Limpiar</button-->
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+            <div class="d-flex flex-column align-items-center gepian-info border-left bg-white rounded p-4 mt-3 mt-lg-0">
+                <img class="img-fluid mb-4" src="{% static '/img/openseed-logo-4.png' %}" alt="two leaf openseed logo" />
+                {% if site_settings.postulation_page_info %}
+                    {{ site_settings.postulation_page_info|safe  }}
+                {% else %}
+                    <p>
+                        Proveemos infraestructura, servicios, financiamiento inicial, mentoreo, entrenamiento 
+                        y espacios de trabajo colaborativos para acelerar el crecimiento y asegurar 
+                        el éxito de las empresas en un proceso intensivo de incubación de 12 meses.
+                    </p>
+                    <p>
+                        Brindamos conocimientos y desarrollamos las habilidades para la gestión 
+                        integral de la empresa: legales, marcas, patentes, modelo de negocios, 
+                        marketing, estrategia corporativa, costos y precios, finanzas, entre otras.
+                    </p>
+                    <p>
+                        Ayudamos a los emprendedores a moverse rápido para convertir 
+                        proyectos en realidad. Para eso trabajamos con metodologías ágiles para iniciar 
+                        empresas, soporte activo, integral y una red de contactos a aquellos apasionados por arrancar 
+                        y hacer crecer sus compañías.
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="bg-white mt-4 p-4 rounded shadow">
+            <div class="row justify-content-center">
+                <div class="col-sm-3">
+                    <span class="">Dirección:</span><br><span class="font-weight-bold">Artigas 652, Salto - Uruguay</span>
+                </div>
+                <div class="col-sm-3 mt-4 mt-sm-0">
+                    <span class="">Teléfono:</span><br><span class="font-weight-bold">(+598) 473 32425</span>
+                </div>
+                <div class="col-sm-3 mt-4 mt-sm-0">
+                    <span class="">E-mail:</span><br><a class="font-weight-bold" href="mailto:contacto@gepian.com.uy">contacto@gepian.com.uy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $('#page-content-wrapper').addClass('postulation-page');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends '../../base.html' %}
+{% load custom_filters %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        {% if model_handle in 'provinces,cities,technicians,technicianspecialities,businessareas,files,users' %}
+            <a href="{% url 'gepian:administrationindex' %}">Administración</a>
+        {% else %}
+            <a href="{% url 'gepian:dashboardindex' %}">Inicio</a>
+        {% endif %}
+        {% block crumbs %}
+            {% if model_name %} &rsaquo; <span class="text-capitalize">{{ model_name }}</span>{% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<div class="list-model-page list-{{ model_handle }} {% if model_handle == 'inscriptions' %}pt-4{% endif %}">
+    <!-- h4 class="page__title">{{ model_name }}</h4-->
+    <!-- Start Actions -->
+    {% if model_handle != 'inscriptions' %}
+        <div class="list-model-page__actions btn-toolbar justify-content-between my-4" role="toolbar" aria-label="Toolbar">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a href="{% url 'gepian:genericaddmodel' model=model_handle %}">
+                    <button class="btn btn-primary rounded d-flex align-items-center shadow-sm">
+                        <i class="d-flex align-items-center bi bi-person-plus"></i>
+                        <span class="pl-2">
+                            Añadir {{ model_name_singular }}
+                        </span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+    <!-- End Actions -->
+
+    {% if post_successful == True %}
+        <div class="alert alert-success" role="alert">
+            Cambios guardados con éxito
+        </div>
+    {% endif %}
+    {% if post_delete_successful == True %}
+        <div class="alert alert-warning" role="alert">
+            Registro eliminado con éxito
+        </div>
+    {% endif %}
+    <div class="table-container table-responsive p-4 shadow rounded">
+        {% if general_search_form %}
+            <div class="" id="generalSearch{{model_handle}}">
+                <div class="general-search-bar">
+                    {% csrf_token %}
+                    {{general_search_form.media }}
+                    {% for field in general_search_form %}
+                        <div class="form-group mb-3">
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger py-1">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+            </div>
+        {% else %}
+            <div class="btn-group mb-4 d-flex" role="group" aria-label="Second group">
+                <div class="input-group">
+                    <input id="searchbox" type="text" class="form-control rounded" placeholder="Filtrar tabla..." aria-label="search" aria-describedby="search">
+                </div>
+            </div>
+        {% endif %}
+        {% include '../snippets/list-filters.html' with model_objects_filter_dict=model_objects_filter_dict model_handle=model_handle filter_bar=general_search_form %}
+        <div class="table-responsive">
+            <table id="searchtable" class="table table-striped border-top-primary [table-sm]">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        {% for field in fields_form %}
+                            <th scope="col">{{ field.label }}</th>
+                        {% endfor %}
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for instance_dict in model_objects_dict %}
+                        <tr>
+                            <th scope="row">{{ instance_dict.id }}</th>
+                            {% for field in fields_form %}
+                                {% if field.name|slice:'-3:' == '_id' %}
+                                    <td>{{ instance_dict|get_foreign_key_item:field.name|get_display_name:model_handle }}</td>
+                                {% else %}
+                                    <td>{{ instance_dict|get_item:field.name|get_display_name:model_handle }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            <td>
+                                <!-- Actions -->
+                                <div class="d-flex justify-content-start pt-1">
+                                    <button class="btn btn-link action-link mr-3 p-0" type="button" data-toggle="modal" data-target="#quickviewModal{{ instance_dict.id }}">
+                                        <div data-toggle="tooltip" data-placement="top" title="Vista previa">
+                                            <i class="d-flex align-items-center bi bi-eye-fill"></i>
+                                        </div>
+                                    </button>
+                                    <a class="action-link" href="{% url 'gepian:genericeditmodel' model=model_handle id=instance_dict.id %}" data-toggle="tooltip" data-placement="top" title="Editar">
+                                        <i class="d-flex align-items-center bi bi-pencil-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Modal -->
+                        <div class="modal fade" id="quickviewModal{{ instance_dict.id }}" tabindex="-1" role="dialog" aria-labelledby="quickviewModal{{ instance_dict.id }}Title" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="quickviewModal{{ instance_dict.id }}Title">
+                                    <a class="text-capitalize" href="{% url 'gepian:genericeditmodel' model=model_handle id=instance_dict.id %}" aria-label="edit" data-toggle="tooltip" data-placement="bottom" title="Editar">
+                                    {{ model_name_singular }}: #{{ instance_dict.id }}
+                                    </a>
+                                </h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <ul class="list-group shadow-sm rounded">
+                                        {% for field in instance_dict|get_item:'instance_serialized' %}
+                                            <li class="list-group-item">
+                                                <span class="font-weight-bold text-capitalize">{{ field|get_field_display_label:model_handle }}: </span>
+                                                {{ instance_dict|get_item:'instance_serialized'|get_item:field|get_display_name:model_handle|safe }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <div class="mt-5">
+                                        {% include '../sections/related-model-links-handler.html' with model_handle=model_handle related_model_handle='' model_instance=instance_dict|get_item:'instance' %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary  rounded shadow-sm" data-dismiss="modal">Cerrar</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex flex-column align-items-center [pagination]">
+            <div>
+                {% if model_objects_dict.has_previous %}
+                    <a href="?page=1">&laquo; primera</a>
+                    <a href="?page={{ model_objects_dict.previous_page_number }}">anterior</a>
+                {% endif %}
+                {% for num in model_objects_dict.paginator.page_range|slice:":5" %}
+                    {% ifequal num model_objects_dict.number %}
+                        <span class="current"><strong>{{ num }} </strong></span>
+                    {% else %}
+                        <a href="?page={{ num }}"> {{ num }} </a>
+                    {% endifequal %} 
+                {% endfor %}
+                {% if model_objects_dict.has_next %}
+                    <a href="?page={{ model_objects_dict.next_page_number }}">siguiente</a>
+                    <a href="?page={{ model_objects_dict.paginator.num_pages }}">última &raquo;</a>
+                    <br>
+                {% endif %}
+            </div>
+            <div>
+                <span class="current">
+                    Página {{ model_objects_dict.number }} de {{ model_objects_dict.paginator.num_pages }}
+                </span>
+            </div>
+        </div>
+        {% if model_handle == 'postulations' %}
+            <div class="d-flex w-100 justify-content-end">
+                <a href="{% url 'gepian:postulate'  %}" target='__blank'>↗ Página de postulación</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,8 @@
+{% load static %}
+
+<h1>Status Report</h1>
+
+{% for message_k, message_v in messages.items %}
+    <p>- {{ message_k }}: <br>{{ message_v }}</p>
+{% endfor %}
+

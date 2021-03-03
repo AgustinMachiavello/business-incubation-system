@@ -1,0 +1,134 @@
+{% extends '../../base_public.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<div class="activity-inscription-page container-fluid">
+    <div class="d-none d-lg-block">
+        <a href="https://www.gepian.com.uy/">
+            <img class="mb-5" src="{% static '/img/logoipsum.png' %}" alt="logo gepian"/>
+        </a>
+    </div>
+    <div class="form-wrapper p-4 shadow rounded">
+        <div class="pb-4">
+            <h2 class="font-weight-bold">Inscripción a '{{ activity.title }}'</h2>
+            <hr>
+
+            {% if activity.date %}
+                <p class="badge badge-primary text-wrap">
+                    
+                    {{ activity.date|date }} {% if activity.start_time %}| De {{ activity.start_time }}{% endif %} {% if activity.end_time %} a {{ activity.end_time }}{% endif %}
+                </p>
+            {% endif %}
+            {% if activity.inscription_deadline %}
+                <p class="badge badge-warning text-wrap">
+                    Límite de inscripción: {{ activity.inscription_deadline|date }}
+                </p>
+            {% endif %}
+            {% if activity.attendance_limit > 0 %}
+                {% if activity.inscriptions.all.count >= activity.attendance_limit %}
+                    <p class="badge badge-danger text-wrap">
+                        Sin cupos disponibles
+                    </p>
+                {% else %}
+                    <p class="badge badge-danger text-wrap">
+                        Cupos disponibles: {{ activity.attendance_limit|substract:activity.inscriptions.all }}
+                    </p>
+                {% endif %}
+            {% endif %}
+            {% if post_error == True %}
+                <div class="alert alert-danger" role="alert">
+                    Ya estás inscrito a la actividad
+                </div>
+            {% endif %}
+            {% if post_successful == True %}
+                <div class="alert alert-success" role="alert">
+                    Tu inscripción ha sido enviada con éxito. Muchas gracias
+                </div>
+            {% else %}
+                <p>
+                    {{ activity.description|safe }}
+                </p>
+                <p class="">
+                    <span class="text-danger">*</span> = Campo obligatorio
+                </p>
+            {% endif %}
+        </div>
+        {% if activity.inscriptions.all|length >= activity.attendance_limit %}
+            <div class="alert alert-danger" role="alert">
+                Límite de cupos alcanzado.
+            </div>
+        {% elif deadline_available == False  %}
+            <div class="alert alert-danger" role="alert">
+                El límite de inscripción del evento ha terminado.
+            </div>
+        {% else %}
+            <div class="d-flex flex-column">
+                {% if post_successful == False %}
+                    <form method="POST" id="add_{{ model_handle }}_public_form"
+                        action="{% url 'gepian:inscription' inscription_code=activity.inscription_link %}"
+                        class="border rounded p-4">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        {% for field in form %}
+                            <div class="form-group mb-3">
+                                {% if field.name == 'name' %}
+                                    <hr>
+                                {% endif %}
+                                <label class="font-weight-bold" for="id_{{ field.name }}">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                    <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
+
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger py-1">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        <div class="row form-group form-actions mb-0">
+                            <div>
+                                {% for error in form.non_field_errors %}
+                                    <div class="alert alert-danger py-1">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-12 col-xs-7">
+                                <button type="submit" class="btn btn-orange shadow rounded font-weight-bold btn-lg">Inscribirme</button>
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="bg-white mt-4 p-4 rounded shadow">
+        <div class="row justify-content-center">
+            <div class="col-sm-3">
+                <span class="">Dirección:</span><br><span class="font-weight-bold">Artigas 652, Salto - Uruguay</span>
+            </div>
+            <div class="col-sm-3 mt-4 mt-sm-0">
+                <span class="">Teléfono:</span><br><span class="font-weight-bold">(+598) 473 32425</span>
+            </div>
+            <div class="col-sm-3 mt-4 mt-sm-0">
+                <span class="">E-mail:</span><br><a class="font-weight-bold" href="mailto:contacto@gepian.com.uy">contacto@gepian.com.uy</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $('#page-content-wrapper').addClass('inscription-page');
+    });
+</script>
+{% endblock %}

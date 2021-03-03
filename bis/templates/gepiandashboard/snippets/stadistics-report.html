@@ -1,0 +1,22 @@
+{% load static %}
+
+{% block content %}
+
+<div class="information-block information-block--report analytics-loader p-3 shadow rounded {% if graph_size == 'large' %}information-block--large{% endif %} {% if show_graph != true %}information-block--no-graph{% endif %}" data-analytichandle="{{ analytic_handle }}">
+    
+    <h3 class="d-flex information-block__title--report">{% if logo %}<i class="d-flex align-items-center bi {{ logo }} pr-2"></i>{% endif %}{{ title }}</h3>
+    <p class="information-block__stadistic analytics-holder">...</p>
+    {% if show_graph %}
+        <div class="chart-wrapper">
+            <canvas class="analytics-graph chart-canvas--small" data-chart="{% if graph_type %}{{ graph_type }}{% else %}bar{% endif %}"></canvas>
+        </div>
+    {% else %}
+        <hr>
+    {% endif %}
+    {% if link_url %}
+        <a class="information-block__link--report" href="{{ link_url }}" target="{% if open_link_on_new_tab %}_blank{% else %}_self{% endif %}">{{ link_label }}</a>
+    {% endif %}
+    
+</div>
+{% endblock %}
+

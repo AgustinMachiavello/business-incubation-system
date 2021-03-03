@@ -1,0 +1,29 @@
+{% extends '../../base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+    <div class="d-flex flex-column">
+        <div class="row">
+            <h4 class="page__title ml-3">Reportes</h4>
+        </div>
+        <div class="d-flex flex-row flex-wrap justify-content-between list-group text-capitalize">
+            {% for menu, values in menus.items %}
+                <a class="menu-block btn btn-link bg-white d-flex p-4 mb-2 shadow rounded" href="{% url 'gepian:genericmodelreport' model=menu %}">
+                    {% if values|get_item:'logo' %}
+                        <i class="d-flex align-items-center bi {{ values|get_item:'logo' }}"></i>
+                    {% endif %}
+                    <span class="pl-2">
+                        {{ values|get_item:'label' }}
+                    </span>
+                </a>
+            {% endfor %}
+        </div>
+        <h4 class="page__title pt-4">Resumen {% now "Y" %}</h4>
+        <div class="d-flex flex-wrap">
+            <!-- Reports Blocks -->
+            {% for analytic, analytic_data in analytics.items %}
+                {% include '../snippets/stadistics-report.html' with title=analytic_data|get_item:'title' analytic_handle=analytic_data|get_item:'analytic_handle' show_graph=analytic_data|get_item:'show_graph' graph_type=analytic_data|get_item:'graph_type' link_url=analytic_data|get_item:'link_url' link_label=analytic_data|get_item:'link_label' logo=analytic_data|get_item:'logo' %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

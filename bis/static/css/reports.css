@@ -1,0 +1,20 @@
+.information-block__title--report {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.information-block--large {
+    width: 100%;
+}
+
+.chart-canvas--small {
+}
+
+.information-block__link--report {
+    text-transform: unset;
+}
+
+.report-links-wrapper {
+    background-color: var(--plain-white);
+}

@@ -1,0 +1,24 @@
+.list-model-page .table-container {
+    background-color: var(--plain-white);
+}
+
+th {
+    text-transform: capitalize;
+}
+
+.list-model-page .dropdown-menu {
+    width: unset;
+}
+
+.list-filters-wrapper button{
+    text-transform: capitalize;
+}
+
+.dropdown-item .form-check-input {
+    position: relative;
+    margin-left: unset;
+}
+
+.dropdown-item .form-check-label {
+    text-transform: capitalize;
+}
